@@ -1,0 +1,51 @@
+<p>add new book here</p>
+
+<form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="author">Author:</label>
+    <input id="author" formControlName="author" type="text">
+    <div *ngIf="bookForm.get('author')?.invalid && bookForm.get('author')?.touched">
+      Author is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title" type="text">
+    <div *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched">
+      Title is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="publisher">Publisher:</label>
+    <input id="publisher" formControlName="publisher" type="text">
+    <div *ngIf="bookForm.get('publisher')?.invalid && bookForm.get('publisher')?.touched">
+      Publisher is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="year">Year:</label>
+    <input id="year" formControlName="year" type="number">
+    <div *ngIf="bookForm.get('year')?.invalid && bookForm.get('year')?.touched">
+      Year is required and must be a 4-digit number.
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
+  <div>
+    <label for="genre">Genre:</label>
+    <input id="genre" formControlName="genre" type="text">
+    <div *ngIf="bookForm.get('genre')?.invalid && bookForm.get('genre')?.touched">
+      Genre is required.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="bookForm.invalid">Register Book</button>
+</form>
