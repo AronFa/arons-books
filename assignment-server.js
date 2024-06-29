@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
+const app = express();
+const port = 3000;
 
-var app = express();
-
-app.use(bodyParser.json());
+// TODO: checnk id cors() is actually needed
+app.use(bodyParser.json(), cors());
 
 var BOOKS = require("./data/books");
 var GENRES = require("./data/genres");
@@ -56,7 +58,7 @@ app.post("/books", (req, res, next) => {
         if (!isGenreValid) {
             res.json({ message: "Invalid genre", field: "genre" });
         } else {
-            if(!isFullNameValid) {
+            if (!isFullNameValid) {
                 res.json({ message: "Invalid author name", field: "author" });
             }
         }
@@ -85,7 +87,7 @@ app.put("/books/:id", (req, res, next) => {
             if (!isGenreValid) {
                 res.json({ message: "Invalid genre", field: "genre" });
             } else {
-                if(!isFullNameValid) {
+                if (!isFullNameValid) {
                     res.json({ message: "Invalid author name", field: "author" });
                 }
             }
@@ -112,8 +114,8 @@ app.get("/genres", (req, res, next) => {
     res.json(GENRES);
 });
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(port, () => {
+    console.log(`Server is running on ${port}`);
 });
 
 function validateGenre(genre) {

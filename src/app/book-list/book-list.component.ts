@@ -4,8 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Book } from '../service/book';
-import { Genre } from '../service/genre';
+import { BookService } from '../service/book.service';
 
 @Component({
   selector: 'app-book-list',
@@ -15,32 +16,26 @@ import { Genre } from '../service/genre';
   styleUrl: './book-list.component.scss'
 })
 export class BookListComponent implements OnInit {
-
   displayedColumns: string[] = ['author', 'title', 'publisher', 'year', 'description', 'genre', 'edit'];
-  dataSource = BOOK_DATA;
+  dataSource!: Observable<Book[]>;
+
+  constructor(private bookService: BookService) { }
 
   ngOnInit(): void {
-    // Fetch or set your data here
+    this.fetchBooks();
+  }
+
+  fetchBooks(): void {
+    this.dataSource = this.bookService.getBooks();
   }
 
   editBook(book: Book): void {
     console.log('Edit book:', book);
-    // Implement your edit logic here
+    // Implement edit logic here
   }
 
   addBook() {
     console.log('Add new book');
   }
-}
 
-const BOOK_DATA: Book[] = [
-  {
-    id: 1,
-    author: 'Author 1',
-    title: 'Title 1',
-    publisher: 'Publisher 1',
-    year: 2020,
-    description: 'Description 1',
-    genre: Genre.ChildrenStory
-  },
-];
+}
