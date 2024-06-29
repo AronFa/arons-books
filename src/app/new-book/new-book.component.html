@@ -6,7 +6,8 @@
     <label for="author">Author:</label>
     <input id="author" formControlName="author" type="text">
     <div *ngIf="bookForm.get('author')?.invalid && bookForm.get('author')?.touched">
-      Author is required.
+      <div *ngIf="bookForm.get('author')?.errors?.['required']">Author is required.</div>
+      <div *ngIf="bookForm.get('author')?.errors?.['maxlength']">Author can't exceed 100 characters.</div>
     </div>
   </div>
 
@@ -14,7 +15,8 @@
     <label for="title">Title:</label>
     <input id="title" formControlName="title" type="text">
     <div *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched">
-      Title is required.
+      <div *ngIf="bookForm.get('title')?.errors?.['required']">Title is required.</div>
+      <div *ngIf="bookForm.get('title')?.errors?.['maxlength']">Title can't exceed 100 characters.</div>
     </div>
   </div>
 
@@ -22,7 +24,8 @@
     <label for="publisher">Publisher:</label>
     <input id="publisher" formControlName="publisher" type="text">
     <div *ngIf="bookForm.get('publisher')?.invalid && bookForm.get('publisher')?.touched">
-      Publisher is required.
+      <div *ngIf="bookForm.get('publisher')?.errors?.['required']">Publisher is required.</div>
+      <div *ngIf="bookForm.get('publisher')?.errors?.['maxlength']">Publisher can't exceed 100 characters.</div>
     </div>
   </div>
 
@@ -30,18 +33,26 @@
     <label for="year">Year:</label>
     <input id="year" formControlName="year" type="number">
     <div *ngIf="bookForm.get('year')?.invalid && bookForm.get('year')?.touched">
-      Year is required and must be a 4-digit number.
+      <div *ngIf="bookForm.get('year')?.errors?.['required']">Year is required.</div>
+      <div *ngIf="bookForm.get('year')?.errors?.['pattern']">Year must be a 4 digit number.</div>
+      <div *ngIf="bookForm.get('year')?.errors?.['futureYear']">Year can't be in the future.</div>
     </div>
   </div>
 
   <div>
     <label for="description">Description:</label>
     <textarea id="description" formControlName="description"></textarea>
+    <div *ngIf="bookForm.get('description')?.invalid && bookForm.get('description')?.touched">
+      <div *ngIf="bookForm.get('description')?.errors?.['required']">Description is required.</div>
+      <div *ngIf="bookForm.get('description')?.errors?.['maxlength']">Description can't exceed 500 characters.</div>
+    </div>
   </div>
 
   <div>
     <label for="genre">Genre:</label>
-    <input id="genre" formControlName="genre" type="text">
+    <select id="genre" formControlName="genre">
+      <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+    </select>
     <div *ngIf="bookForm.get('genre')?.invalid && bookForm.get('genre')?.touched">
       Genre is required.
     </div>
