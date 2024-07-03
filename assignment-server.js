@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 
-// TODO: checnk id cors() is actually needed
+// TODO: check if cors() is actually needed
 app.use(bodyParser.json(), cors());
 
 var BOOKS = require("./data/books");
@@ -24,7 +24,7 @@ if (GENRES && GENRES.length > 0) {
 }
 
 app.get("/books", (req, res, next) => {
-    res.json(BOOKS);
+    res.json(books);
 });
 
 app.get("/books/:bookId", (req, res, next) => {
