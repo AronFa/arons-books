@@ -1,7 +1,23 @@
 <nav>
-  <ul>
-    <li><a routerLink="home">Home</a></li>
-    <li><a routerLink="book-list">Books</a></li>
-    <li><a routerLink="new-book">add new book</a></li>
-  </ul>
+  <mat-toolbar color="primary">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>menu</mat-icon>
+      <span class="menu-label">Áron's books</span>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <a mat-menu-item routerLink="home">
+        <mat-icon>home</mat-icon>
+        <span>home</span>
+      </a>
+      <button mat-menu-item routerLink="new-book">
+        <mat-icon>add</mat-icon>
+        <span>add new book</span>
+      </button>
+      <button mat-menu-item routerLink="book-list">
+        <mat-icon>menu_book</mat-icon>
+        <span>books</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
 </nav>

@@ -1,14 +1,6 @@
 import { Book } from "../service/book";
 import { Genre } from "../service/genre";
-
-interface BookData {
-    author: string;
-    title: string;
-    publisher: string;
-    year: number;
-    description: string;
-    genre: string;
-}
+import { BookData } from "./BookData";
 
 export function mapGenre(genre: string): Genre {
     switch (genre.toLowerCase()) { // TODO: TypeError: undefined is not an object (evaluating 'genre.toLowerCase')
