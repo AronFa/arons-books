@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Book } from '../service/book';
+import { BookService } from '../service/book.service';
 import { Genre } from '../service/genre';
 
 @Component({
@@ -33,7 +34,11 @@ export class BookFormComponent implements OnInit, OnChanges {
 
   @Input() book!: Book;
 
-  constructor(private fb: FormBuilder) { }
+
+  constructor(
+    private fb: FormBuilder,
+    private bookService: BookService
+  ) { }
 
   ngOnInit(): void {
     this.bookForm = this.fb.group({
@@ -84,8 +89,25 @@ export class BookFormComponent implements OnInit, OnChanges {
   onSubmit() {
     if (this.bookForm.valid) {
       const newBook: Book = this.bookForm.value;
-      console.log('New Book:', newBook);
-      // Handle the book registration logic here
+      if (this.book && this.book.id) {
+        this.bookService.updateBook(this.book.id, newBook).subscribe({
+          next: updatedBook => {
+            console.log('Book updated successfully', updatedBook);
+          },
+          error: err => {
+            console.error('Error updating book', err);
+          }
+        });
+      } else {
+        this.bookService.addBook(newBook).subscribe({
+          next: addedBook => {
+            console.log('Book added successfully', addedBook);
+          },
+          error: err => {
+            console.error('Error adding book', err);
+          }
+        });
+      }
     } else {
       console.log('Form is invalid');
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { mapBookData } from '../util/book-mapper.util';
+import { mapBookDataToBook as mapToBook, mapBookToBookData as mapToBookData } from '../util/book-mapper.util';
 import { Book } from './book';
 
 @Injectable({
@@ -12,13 +12,20 @@ export class BookService {
 
   constructor(private http: HttpClient) { }
 
-  //TODO: add api-book-response.interface.ts & change name of book.ts to book.interface.ts 
-  //      (i mean if this is a thing in angular - i hope it is though)
-
   getBooks(): Observable<Book[]> {
-    return this.http.get<any[]>(this.apiUrl + '/books').pipe(
-      map(response => Object.entries(response).map(([id, data]) => mapBookData({ [id]: data })))
+    return this.http.get<any[]>(`${this.apiUrl}/books`).pipe(
+      map(response => Object.entries(response).map(([id, data]) => mapToBook({ [id]: data })))
     );
   }
 
+  addBook(book: Book): Observable<Book> {
+    const bookData = mapToBookData(book);
+    console.log(bookData);
+    return this.http.post<Book>(`${this.apiUrl}/books`, bookData);
+  }
+
+  updateBook(id: string, book: Book): Observable<Book> {
+    const bookData = mapToBookData(book);
+    return this.http.put<Book>(`${this.apiUrl}/books/${id}`, bookData);
+  }
 }
