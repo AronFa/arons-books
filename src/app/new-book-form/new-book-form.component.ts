@@ -1,17 +1,24 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Book } from '../service/book';
 import { Genre } from '../service/genre';
 
+
 @Component({
-  selector: 'app-new-book',
+  selector: 'app-new-book-from',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor],
-  templateUrl: './new-book.component.html',
-  styleUrl: './new-book.component.scss'
+  imports: [ReactiveFormsModule, NgIf, NgFor,
+    MatInputModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatCardModule],
+  templateUrl: './new-book-form.component.html',
+  styleUrl: './new-book-form.component.scss'
 })
-export class NewBookComponent {
+export class NewBookFormComponent {
   bookForm: FormGroup;
   genres = Object.values(Genre);
 

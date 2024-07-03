@@ -1,10 +1,12 @@
 import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
+import { NewBookDialogComponent } from '../new-book-dialog/new-book-dialog.component';
 import { Book } from '../service/book';
 import { BookService } from '../service/book.service';
 
@@ -18,6 +20,8 @@ import { BookService } from '../service/book.service';
 export class BookListComponent implements OnInit {
   displayedColumns: string[] = ['author', 'title', 'publisher', 'year', 'description', 'genre', 'edit'];
   dataSource!: Observable<Book[]>;
+
+  readonly dialog = inject(MatDialog);
 
   constructor(private bookService: BookService) { }
 
@@ -34,8 +38,11 @@ export class BookListComponent implements OnInit {
     // Implement edit logic here
   }
 
-  addBook() {
-    console.log('Add new book');
+  openDialog() {
+    const dialogRef = this.dialog.open(NewBookDialogComponent, {
+      width: '80%',
+      maxWidth: '1200px'
+    });
   }
 
 }
