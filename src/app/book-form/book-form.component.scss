@@ -1,0 +1,14 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+/* todo: i can't seem to set the color of the divider */
+mat-divider {
+    margin: 32px 0;
+    border-width: 4px;
+}

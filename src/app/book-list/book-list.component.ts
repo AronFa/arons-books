@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
+import { EditBookDialogComponent } from '../edit-book-dialog/edit-book-dialog.component';
 import { NewBookDialogComponent } from '../new-book-dialog/new-book-dialog.component';
 import { Book } from '../service/book';
 import { BookService } from '../service/book.service';
@@ -13,7 +14,7 @@ import { BookService } from '../service/book.service';
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [RouterLink, NgFor, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [EditBookDialogComponent, RouterLink, NgFor, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
 })
@@ -34,9 +35,13 @@ export class BookListComponent implements OnInit {
   }
 
   editBook(book: Book): void {
-    console.log('Edit book:', book);
-    // Implement edit logic here
+    const dialogRef = this.dialog.open(EditBookDialogComponent, {
+      width: '80%',
+      maxWidth: '1200px',
+      data: book,
+    })
   }
+
 
   openDialog() {
     const dialogRef = this.dialog.open(NewBookDialogComponent, {

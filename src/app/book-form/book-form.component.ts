@@ -1,28 +1,41 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Book } from '../service/book';
 import { Genre } from '../service/genre';
 
-
 @Component({
-  selector: 'app-new-book-from',
+  selector: 'app-book-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor,
-    MatInputModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatCardModule],
-  templateUrl: './new-book-form.component.html',
-  styleUrl: './new-book-form.component.scss'
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule
+  ],
+  templateUrl: './book-form.component.html',
+  styleUrl: './book-form.component.scss'
 })
-export class NewBookFormComponent {
-  bookForm: FormGroup;
+export class BookFormComponent implements OnInit, OnChanges {
+  bookForm!: FormGroup;
   genres = Object.values(Genre);
 
-  constructor(private fb: FormBuilder) {
+  @Input() book!: Book;
+
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit(): void {
     this.bookForm = this.fb.group({
       author: ['', [Validators.required, Validators.maxLength(100)]],
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -32,10 +45,35 @@ export class NewBookFormComponent {
       genre: ['', Validators.required]
     });
 
-    console.log('Genres:', this.genres);
+    if (this.book) {
+      console.log("this.book: ");
+      console.log(this.book);
+      this.setFormData();
+    }
+
   }
 
-  yearValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['book'] && this.book) {
+      this.setFormData();
+    }
+  }
+
+  setFormData() {
+    if (this.book && this.bookForm) {
+      this.bookForm.patchValue({
+        author: this.book.author,
+        title: this.book.title,
+        publisher: this.book.publisher,
+        year: this.book.year,
+        description: this.book.description,
+        genre: this.book.genre
+      });
+      //todo: what about the id?
+    }
+  }
+
+  yearValidator(control: AbstractControl): { [key: string]: boolean; } | null {
     const currentYear = new Date().getFullYear();
     if (control.value && control.value > currentYear) {
       return { 'futureYear': true };
@@ -52,5 +90,4 @@ export class NewBookFormComponent {
       console.log('Form is invalid');
     }
   }
-
 }

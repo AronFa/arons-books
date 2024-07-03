@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogActions, MatDialogClose, MatDialogContent } from '@angular/material/dialog';
-import { NewBookFormComponent } from '../new-book-form/new-book-form.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { BookFormComponent } from '../book-form/book-form.component';
 
 @Component({
   selector: 'app-new-book-dialog',
   standalone: true,
-  imports: [NewBookFormComponent, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
+  imports: [BookFormComponent, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, BookFormComponent, MatCardModule, MatDividerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './new-book-dialog.component.html',
   styleUrl: './new-book-dialog.component.scss'

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewBookFormComponent } from './new-book-form.component';
+import { NewBookDialogComponent } from '../new-book-dialog/new-book-dialog.component';
 
-describe('NewBookComponent', () => {
-  let component: NewBookFormComponent;
-  let fixture: ComponentFixture<NewBookFormComponent>;
+describe('NewBookDialogComponent', () => {
+  let component: NewBookDialogComponent;
+  let fixture: ComponentFixture<NewBookDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewBookFormComponent]
+      imports: [NewBookDialogComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(NewBookFormComponent);
+    fixture = TestBed.createComponent(NewBookDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
