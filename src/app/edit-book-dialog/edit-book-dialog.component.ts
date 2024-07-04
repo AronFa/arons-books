@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { BookFormComponent } from '../book-form/book-form.component';
 import { Book } from '../service/book';
@@ -23,8 +23,12 @@ import { Book } from '../service/book';
   styleUrl: './edit-book-dialog.component.scss'
 })
 export class EditBookDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public book: Book) {
-    console.log("injected book data:" + book);
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public book: Book,
+    private dialogRef: MatDialogRef<EditBookDialogComponent>) { }
+
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 
   // TODO - on clicking away from a partially filled dialog request confirmation

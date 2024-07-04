@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -29,11 +29,12 @@ import { Genre } from '../service/genre';
   styleUrl: './book-form.component.scss'
 })
 export class BookFormComponent implements OnInit, OnChanges {
+
   bookForm!: FormGroup;
   genres = Object.values(Genre);
 
   @Input() book!: Book;
-
+  @Output() cancel = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -51,8 +52,6 @@ export class BookFormComponent implements OnInit, OnChanges {
     });
 
     if (this.book) {
-      console.log("this.book: ");
-      console.log(this.book);
       this.setFormData();
     }
 
@@ -64,26 +63,15 @@ export class BookFormComponent implements OnInit, OnChanges {
     }
   }
 
-  setFormData() {
-    if (this.book && this.bookForm) {
-      this.bookForm.patchValue({
-        author: this.book.author,
-        title: this.book.title,
-        publisher: this.book.publisher,
-        year: this.book.year,
-        description: this.book.description,
-        genre: this.book.genre
-      });
-      //todo: what about the id?
-    }
+  onCancel($event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.cancel.emit();
   }
 
-  yearValidator(control: AbstractControl): { [key: string]: boolean; } | null {
-    const currentYear = new Date().getFullYear();
-    if (control.value && control.value > currentYear) {
-      return { 'futureYear': true };
-    }
-    return null;
+  onClear() {
+    this.bookForm.reset();
+    this.bookForm.markAsPristine();
   }
 
   onSubmit() {
@@ -111,5 +99,27 @@ export class BookFormComponent implements OnInit, OnChanges {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  setFormData() {
+    if (this.book && this.bookForm) {
+      this.bookForm.patchValue({
+        author: this.book.author,
+        title: this.book.title,
+        publisher: this.book.publisher,
+        year: this.book.year,
+        description: this.book.description,
+        genre: this.book.genre
+      });
+      //todo: what about the id?
+    }
+  }
+
+  yearValidator(control: AbstractControl): { [key: string]: boolean; } | null {
+    const currentYear = new Date().getFullYear();
+    if (control.value && control.value > currentYear) {
+      return { 'futureYear': true };
+    }
+    return null;
   }
 }

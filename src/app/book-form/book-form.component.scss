@@ -12,3 +12,13 @@ mat-divider {
     margin: 32px 0;
     border-width: 4px;
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spacer {
+    width: 32px;
+}

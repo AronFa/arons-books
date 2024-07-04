@@ -57,6 +57,12 @@
         </mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="bookForm.invalid">Save</button>
+    <div class="button-container">
+        <button mat-raised-button color="accent" (click)="onCancel($event)">Cancel</button>
+        <button mat-raised-button color="warn" (click)="onClear()">Clear</button>
+        <div class="spacer"></div>
+        <button mat-raised-button color="primary" type="submit"
+            [disabled]="bookForm.invalid || !bookForm.touched">Save</button>
+    </div>
 
 </form>
