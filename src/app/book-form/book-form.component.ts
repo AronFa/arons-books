@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import * as _ from 'lodash';
 import { Book } from '../service/book';
 import { BookService } from '../service/book.service';
 import { Genre } from '../service/genre';
@@ -28,13 +29,15 @@ import { Genre } from '../service/genre';
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.scss'
 })
-export class BookFormComponent implements OnInit, OnChanges {
+export class BookFormComponent implements OnInit {
 
   bookForm!: FormGroup;
   genres = Object.values(Genre);
+  originalBook: Book | undefined;
 
   @Input() book!: Book;
-  @Output() cancel = new EventEmitter();
+  @Output() cancel = new EventEmitter<boolean>();
+  @Output() formAltered = new EventEmitter<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +46,7 @@ export class BookFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.bookForm = this.fb.group({
+      id: [null],
       author: ['', [Validators.required, Validators.maxLength(100)]],
       title: ['', [Validators.required, Validators.maxLength(100)]],
       publisher: ['', [Validators.required, Validators.maxLength(100)]],
@@ -52,21 +56,23 @@ export class BookFormComponent implements OnInit, OnChanges {
     });
 
     if (this.book) {
+      this.originalBook = _.cloneDeep(this.book);
       this.setFormData();
     }
 
-  }
+    this.bookForm.valueChanges.subscribe(() => {
+      const isAltered = !_.isEqual(this.originalBook, this.bookForm.value);
+      this.formAltered.emit(isAltered);
+    });
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['book'] && this.book) {
-      this.setFormData();
-    }
   }
 
   onCancel($event: Event) {
     $event.preventDefault();
     $event.stopPropagation();
-    this.cancel.emit();
+    const isAltered = !_.isEqual(this.originalBook, this.bookForm.value);
+    console.log("isAltered:" + isAltered);
+    this.cancel.emit(isAltered);
   }
 
   onClear() {
@@ -104,6 +110,7 @@ export class BookFormComponent implements OnInit, OnChanges {
   setFormData() {
     if (this.book && this.bookForm) {
       this.bookForm.patchValue({
+        id: this.book.id || null,
         author: this.book.author,
         title: this.book.title,
         publisher: this.book.publisher,
@@ -111,7 +118,6 @@ export class BookFormComponent implements OnInit, OnChanges {
         description: this.book.description,
         genre: this.book.genre
       });
-      //todo: what about the id?
     }
   }
 

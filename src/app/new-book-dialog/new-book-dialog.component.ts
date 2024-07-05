@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { BookFormComponent } from '../book-form/book-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-new-book-dialog',
@@ -13,14 +14,50 @@ import { BookFormComponent } from '../book-form/book-form.component';
   templateUrl: './new-book-dialog.component.html',
   styleUrl: './new-book-dialog.component.scss'
 })
-export class NewBookDialogComponent {
-  constructor(private dialogRef: MatDialogRef<NewBookDialogComponent>) { }
+export class NewBookDialogComponent implements OnInit {
+  isFormAltered = false;
+  isProgrammaticClose = false;
 
-  closeDialog() {
-    this.dialogRef.close();
+  constructor(private dialog: MatDialog,
+    private dialogRef: MatDialogRef<NewBookDialogComponent>) { }
+
+  ngOnInit(): void {
+    this.dialogRef.beforeClosed().subscribe(() => {
+      if (this.isProgrammaticClose) {
+        return;
+      }
+
+      if (this.isFormAltered) {
+        this.confirmCloseDialog();
+      } else {
+        this.isProgrammaticClose = true;
+        this.dialogRef.close();
+      }
+    });
   }
 
+  closeDialog(confirmNeeded: boolean): void {
+    if (confirmNeeded) {
+      this.confirmCloseDialog();
+    } else {
+      this.dialogRef.close();
+    }
+  }
 
-  // TODO - on clicking away from a partially filled dialog request confirmation
+  confirmCloseDialog(): void {
+    const confirmDialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.dialogRef.close();
+      }
+      // add navigate back on 'cancel'
+    });
+  }
+
+  onFormAltered(isAltered: boolean): void {
+    this.isFormAltered = isAltered;
+  }
+
 
 }
