@@ -7,7 +7,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import * as _ from 'lodash';
 import { Book } from '../service/book';
 import { BookService } from '../service/book.service';
 import { Genre } from '../service/genre';
@@ -33,11 +32,10 @@ export class BookFormComponent implements OnInit {
 
   bookForm!: FormGroup;
   genres = Object.values(Genre);
-  originalBook: Book | undefined;
 
   @Input() book!: Book;
-  @Output() cancel = new EventEmitter<boolean>();
-  @Output() formAltered = new EventEmitter<boolean>();
+  @Output() cancel = new EventEmitter();
+  @Output() formAltered = new EventEmitter<Book>();
 
   constructor(
     private fb: FormBuilder,
@@ -56,13 +54,11 @@ export class BookFormComponent implements OnInit {
     });
 
     if (this.book) {
-      this.originalBook = _.cloneDeep(this.book);
       this.setFormData();
     }
 
     this.bookForm.valueChanges.subscribe(() => {
-      const isAltered = !_.isEqual(this.originalBook, this.bookForm.value);
-      this.formAltered.emit(isAltered);
+      this.formAltered.emit(this.bookForm.value);
     });
 
   }
@@ -70,9 +66,7 @@ export class BookFormComponent implements OnInit {
   onCancel($event: Event) {
     $event.preventDefault();
     $event.stopPropagation();
-    const isAltered = !_.isEqual(this.originalBook, this.bookForm.value);
-    console.log("isAltered:" + isAltered);
-    this.cancel.emit(isAltered);
+    this.cancel.emit();
   }
 
   onClear() {

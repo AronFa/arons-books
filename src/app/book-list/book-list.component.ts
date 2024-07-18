@@ -14,7 +14,7 @@ import { BookService } from '../service/book.service';
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [EditBookDialogComponent, RouterLink, NgFor, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [RouterLink, NgFor, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
 })
@@ -34,20 +34,47 @@ export class BookListComponent implements OnInit {
     this.dataSource = this.bookService.getBooks();
   }
 
-  editBook(book: Book): void {
-    const dialogRef = this.dialog.open(EditBookDialogComponent, {
-      width: '80%',
-      maxWidth: '1200px',
-      data: book,
-    })
-  }
 
-
-  openDialog() {
+  onAddNewBook() {
     const dialogRef = this.dialog.open(NewBookDialogComponent, {
       width: '80%',
       maxWidth: '1200px'
     });
   }
+
+  editBook(book: Book): void {
+    const dialogRef = this.dialog.open(EditBookDialogComponent, {
+      width: '80%',
+      maxWidth: '1200px',
+      data: [book],
+    });
+
+    dialogRef.componentInstance.reopenWithFormState.subscribe((initData: Book[]) => {
+      console.log("subscription \"reopenWithFormState\" called w. params:")
+      console.log(initData);
+      if (initData) {
+        dialogRef.close();
+        this.reopenDialog(initData);
+      }
+    });
+  }
+
+  reopenDialog(initData: Book[]): void {
+    const dialogRef = this.dialog.open(EditBookDialogComponent, {
+      width: '80%',
+      maxWidth: '1200px',
+      data: initData,
+    });
+
+    dialogRef.componentInstance.reopenWithFormState.subscribe((initData: Book[]) => {
+      console.log("subscription \"reopenWithFormState\" called w. params:")
+      console.log(initData);
+      if (initData) {
+        dialogRef.close();
+        this.reopenDialog(initData);
+      }
+    });
+  }
+
 
 }

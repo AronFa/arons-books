@@ -5,6 +5,7 @@ import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialo
 import { MatDividerModule } from '@angular/material/divider';
 import { BookFormComponent } from '../book-form/book-form.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Book } from '../service/book';
 
 @Component({
   selector: 'app-new-book-dialog',
@@ -15,8 +16,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   styleUrl: './new-book-dialog.component.scss'
 })
 export class NewBookDialogComponent implements OnInit {
-  isFormAltered = false;
-  isProgrammaticClose = false;
+  formState: Book | undefined;
+  isProgrammaticClose: boolean | undefined;
 
   constructor(private dialog: MatDialog,
     private dialogRef: MatDialogRef<NewBookDialogComponent>) { }
@@ -27,7 +28,7 @@ export class NewBookDialogComponent implements OnInit {
         return;
       }
 
-      if (this.isFormAltered) {
+      if (this.formState) { //todo: make it check if it's empty
         this.confirmCloseDialog();
       } else {
         this.isProgrammaticClose = true;
@@ -36,8 +37,8 @@ export class NewBookDialogComponent implements OnInit {
     });
   }
 
-  closeDialog(confirmNeeded: boolean): void {
-    if (confirmNeeded) {
+  closeDialog(): void {
+    if (this.formState) {
       this.confirmCloseDialog();
     } else {
       this.dialogRef.close();
@@ -55,8 +56,8 @@ export class NewBookDialogComponent implements OnInit {
     });
   }
 
-  onFormAltered(isAltered: boolean): void {
-    this.isFormAltered = isAltered;
+  onFormAltered(formState: Book): void {
+    this.formState = formState;
   }
 
 

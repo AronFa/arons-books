@@ -4,8 +4,7 @@
 
         <mat-divider></mat-divider>
 
-        <app-book-form [book]="book" (cancel)="closeDialog($event)"
-            (formAltered)="onFormAltered($event)"></app-book-form>
+        <app-book-form [book]="initData[0]" (cancel)="onCancel()" (formAltered)="onFormAltered($event)"></app-book-form>
 
     </mat-card>
 </mat-dialog-content>
