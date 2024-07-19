@@ -31,36 +31,38 @@ export function mapBookToBookData(book: Book): BookData {
 
 function mapGenre(genre: string): Genre {
     switch (genre.toLowerCase()) { // TODO: possible bug: `TypeError: undefined is not an object (evaluating 'genre.toLowerCase')`
+        case 'dráma': return Genre.Drama;
+        case 'életrajz, emlékirat': return Genre.NonFiction;
+        case 'elbeszélés': return Genre.Narrative;
+        case 'fantázia': return Genre.Fantasy;
+        case 'gyermek mese': return Genre.ChildrenStory;
         case 'horror': return Genre.Horror;
+        case 'humor': return Genre.Comedy;
+        case 'krimi': return Genre.DetectiveNovel;
         case 'sci-fi': return Genre.Scifi;
-        case 'drama': return Genre.Drama;
-        case 'detective novel': return Genre.DetectiveNovel;
-        case 'children story': return Genre.ChildrenStory;
-        case 'comedy': return Genre.Comedy;
-        case 'non-fiction': return Genre.NonFiction;
-        case 'narrative': return Genre.Narrative;
-        case 'religion': return Genre.Religion;
         case 'short story': return Genre.ShortStory;
-        case 'fantasy': return Genre.Fantasy;
-        case 'verse': return Genre.Verse;
+        case 'verses kötet': return Genre.Verse;
+        case 'vallás, mitológia': return Genre.Religion;
         default: throw new Error(`Unknown genre: ${genre}`);
     }
 }
 
 function mapGenreToString(genre: Genre): string {
     switch (genre) {
+        case Genre.Comedy: return 'humor';
+        case Genre.ChildrenStory: return 'gyermek mese';
+        case Genre.DetectiveNovel: return 'krimi';
+        case Genre.Drama: return 'dráma';
+        case Genre.Fantasy: return 'fantázia';
         case Genre.Horror: return 'horror';
+        case Genre.Narrative: return 'elbeszélés';
+        case Genre.NonFiction: return 'életrajz, elbeszélés';
+        case Genre.Religion: return 'vallás, mitológia';
         case Genre.Scifi: return 'sci-fi';
-        case Genre.Drama: return 'drama';
-        case Genre.DetectiveNovel: return 'detective novel';
-        case Genre.ChildrenStory: return 'childer story';
-        case Genre.Comedy: return 'comedy';
-        case Genre.NonFiction: return 'non-fiction';
-        case Genre.Narrative: return 'narretive';
-        case Genre.Religion: return 'religion';
-        case Genre.ShortStory: return 'short-story';
-        case Genre.Fantasy: return 'fantasy';
-        case Genre.Verse: return 'verse';
+        case Genre.ShortStory: return 'novella';
+        case Genre.Verse: return 'verses kötet';
         default: throw new Error(`Unknown genre: ${genre}`)
     }
 }
+
+

@@ -49,6 +49,10 @@ export class BookListComponent implements OnInit {
       data: [book],
     });
 
+    dialogRef.afterClosed().subscribe(() => {
+      this.fetchBooks();
+    })
+
     dialogRef.componentInstance.reopenWithFormState.subscribe((initData: Book[]) => {
       console.log("subscription \"reopenWithFormState\" called w. params:")
       console.log(initData);
