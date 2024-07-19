@@ -33,9 +33,10 @@ export class BookFormComponent implements OnInit {
   bookForm!: FormGroup;
   genres = Object.values(Genre);
 
-  @Input() book!: Book;
-  @Output() cancel = new EventEmitter();
-  @Output() formAltered = new EventEmitter<Book>();
+  @Input() book?: Book;
+
+  @Output() closeDialog = new EventEmitter();
+  @Output() requestCancel = new EventEmitter<Book>();
 
   constructor(
     private fb: FormBuilder,
@@ -57,28 +58,13 @@ export class BookFormComponent implements OnInit {
       this.setFormData();
     }
 
-    this.bookForm.valueChanges.subscribe(() => {
-      this.formAltered.emit(this.bookForm.value);
-    });
-
-  }
-
-  onCancel($event: Event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.cancel.emit();
-  }
-
-  onClear() {
-    this.bookForm.reset();
-    this.bookForm.markAsPristine();
   }
 
   onSubmit() {
     if (this.bookForm.valid) {
-      const newBook: Book = this.bookForm.value;
+      const formState: Book = this.bookForm.value;
       if (this.book && this.book.id) {
-        this.bookService.updateBook(this.book.id, newBook).subscribe({
+        this.bookService.updateBook(this.book.id, formState).subscribe({
           next: updatedBook => {
             console.log('Book updated successfully', updatedBook);
           },
@@ -87,7 +73,7 @@ export class BookFormComponent implements OnInit {
           }
         });
       } else {
-        this.bookService.addBook(newBook).subscribe({
+        this.bookService.addBook(formState).subscribe({
           next: addedBook => {
             console.log('Book added successfully', addedBook);
           },
@@ -96,9 +82,21 @@ export class BookFormComponent implements OnInit {
           }
         });
       }
+      this.closeDialog.emit();
+
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  onCancel() {
+    console.log("bookform emited a cancel request")
+    this.requestCancel.emit(this.bookForm.value);
+  }
+
+  onClear() {
+    this.bookForm.reset();
+    this.bookForm.markAsPristine(); // todo: i don't think it works atm
   }
 
   setFormData() {
@@ -122,4 +120,6 @@ export class BookFormComponent implements OnInit {
     }
     return null;
   }
+
+  // todo: backend apparently validates that author has a ' ' with a non-zero index.
 }
