@@ -37,7 +37,8 @@ export class BookListComponent implements OnInit {
   onAddNewBook() {
     const dialogRef = this.dialog.open(NewBookDialogComponent, {
       width: '80%',
-      maxWidth: '1200px'
+      maxWidth: '1200px',
+      disableClose: true
     });
   }
 

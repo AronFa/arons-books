@@ -1,5 +1,5 @@
 <div class="app-button-container">
-  <button mat-raised-button (click)="onAddNewBook()" class="app-button">
+  <button mat-raised-button (click)="onAddNewBook()" (newBookDialogClosed)="fetchBooks()" class="app-button">
     Add new
   </button>
 </div>
@@ -46,7 +46,7 @@
   <ng-container matColumnDef="edit">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let book">
-      <app-edit-book [originalBook]="book" (editBookDialogClosed)="fetchBooks()">
+      <app-edit-book [originalBook]="book" (editBookDialogClosed)="fetchBooks()" (newBookDialogClosed)="fetchBooks()">
       </app-edit-book>
     </td>
   </ng-container>
@@ -57,7 +57,7 @@
 
 
 <div class="app-button-container">
-  <button mat-raised-button (click)="onAddNewBook()" class="app-button">
+  <button mat-raised-button (click)="onAddNewBook()" (newBookDialogClosed)="fetchBooks()" class="app-button">
     Add new book
   </button>
 </div>

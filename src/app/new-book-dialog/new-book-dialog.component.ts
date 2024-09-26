@@ -9,7 +9,14 @@ import { Book } from '../service/book';
 @Component({
   selector: 'app-new-book-dialog',
   standalone: true,
-  imports: [BookFormComponent, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, BookFormComponent, MatCardModule, MatDividerModule],
+  imports: [
+    BookFormComponent,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './new-book-dialog.component.html',
   styleUrl: './new-book-dialog.component.scss'
@@ -19,15 +26,16 @@ export class NewBookDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public book: Book,
-    private editDialogRef: MatDialogRef<NewBookDialogComponent>
-  ) {
-  }
+    private newBookDialogRef: MatDialogRef<NewBookDialogComponent>
+  ) { }
 
   close() {
-    this.editDialogRef.close();
+    this.newBookDialogRef.close();
   }
 
   handleCancelRequest(formState: Book) {
+    console.log("new-book-dialog component recieved cancel Request w formstate")
+    console.log(formState);
     this.requestCancel.emit(formState);
   }
 

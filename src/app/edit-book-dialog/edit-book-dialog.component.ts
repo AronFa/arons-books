@@ -28,8 +28,7 @@ export class EditBookDialogComponent {
     constructor(
         @Inject(MAT_DIALOG_DATA) public book: Book,
         private editDialogRef: MatDialogRef<EditBookDialogComponent>
-    ) {
-    }
+    ) { }
 
     close() {
         this.editDialogRef.close();

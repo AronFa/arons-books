@@ -9,3 +9,7 @@ export interface Book {
   description: string,
   genre: Genre
 }
+
+export function isEmpty(book: Book): boolean {
+  return Object.values(book).every(value => value === undefined || value === null || value === '');
+}

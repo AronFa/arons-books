@@ -16,12 +16,12 @@ import { Book } from '../service/book';
 })
 export class EditBookComponent implements OnInit {
 
-  readonly dialog = inject(MatDialog);
-
   @Input() originalBook!: Book;
-  @Input() formState!: Book;
 
   @Output() editBookDialogClosed = new EventEmitter();
+
+  readonly dialog = inject(MatDialog);
+  formState!: Book;
 
   ngOnInit() {
     this.formState = this.originalBook;
@@ -36,23 +36,21 @@ export class EditBookComponent implements OnInit {
     });
 
     editBookDialogRef.backdropClick().subscribe(() => {
-      console.log("editBookDialogRef.backDropClick()")
       this.hadleCancelConfirmation(editBookDialogRef);
     })
 
     editBookDialogRef.componentInstance.requestCancel.subscribe((formState: Book) => {
       this.formState = formState;
+      this.hadleCancelConfirmation(editBookDialogRef);
     })
 
-    editBookDialogRef.afterClosed().subscribe((bookFromState: Book) => {
+    editBookDialogRef.afterClosed().subscribe(() => {
       this.editBookDialogClosed.emit();
     })
   }
 
 
   private hadleCancelConfirmation(editBookDialogRef: MatDialogRef<EditBookDialogComponent, any>): void {
-    console.log(this.originalBook);
-    console.log(this.formState);
     if (isEqual(this.originalBook, this.formState)) {
       editBookDialogRef.close();
       return;
