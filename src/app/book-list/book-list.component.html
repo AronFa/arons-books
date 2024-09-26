@@ -1,9 +1,3 @@
-<div class="app-button-container">
-  <button mat-raised-button (click)="onAddNewBook()" (newBookDialogClosed)="fetchBooks()" class="app-button">
-    add new book
-  </button>
-</div>
-
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
 
   @for (column of displayedColumns; track column) {
@@ -63,8 +57,4 @@
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="book-detail-row"></tr>
 </table>
 
-<div class="app-button-container">
-  <button mat-raised-button (click)="onAddNewBook()" (newBookDialogClosed)="fetchBooks()" class="app-button">
-    add new book
-  </button>
-</div>
+<app-new-book class="new-book-button"></app-new-book>

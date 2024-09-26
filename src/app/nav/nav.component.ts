@@ -20,7 +20,7 @@ export class NavComponent {
 
   readonly dialog = inject(MatDialog);
 
-  openDialog() {
+  openNewBookDialog() {
     const dialogRef = this.dialog.open(NewBookDialogComponent, {
       restoreFocus: false,
       width: '80%',

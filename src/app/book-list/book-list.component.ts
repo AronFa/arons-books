@@ -7,13 +7,14 @@ import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { EditBookComponent } from '../edit-book/edit-book.component';
 import { NewBookDialogComponent } from '../new-book-dialog/new-book-dialog.component';
+import { NewBookComponent } from "../new-book/new-book.component";
 import { Book } from '../service/book';
 import { BookService } from '../service/book.service';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, MatIconModule, EditBookComponent],
+  imports: [MatTableModule, MatButtonModule, MatIconModule, EditBookComponent, NewBookComponent, NewBookComponent],
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
   animations: [
