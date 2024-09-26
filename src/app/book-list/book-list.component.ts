@@ -1,10 +1,9 @@
-import { NgFor } from '@angular/common';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EditBookComponent } from '../edit-book/edit-book.component';
 import { NewBookDialogComponent } from '../new-book-dialog/new-book-dialog.component';
@@ -14,13 +13,22 @@ import { BookService } from '../service/book.service';
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [RouterLink, NgFor, MatTableModule, MatButtonModule, MatIconModule, EditBookComponent],
+  imports: [MatTableModule, MatButtonModule, MatIconModule, EditBookComponent],
   templateUrl: './book-list.component.html',
-  styleUrl: './book-list.component.scss'
+  styleUrls: ['./book-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class BookListComponent implements OnInit {
-  displayedColumns: string[] = ['author', 'title', 'publisher', 'year', 'description', 'genre', 'edit'];
+  displayedColumns: string[] = ['title', 'author', 'genre'];
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   dataSource!: Observable<Book[]>;
+  expandedElement: Book | null = null;
 
   readonly dialog = inject(MatDialog);
 
@@ -40,6 +48,13 @@ export class BookListComponent implements OnInit {
       maxWidth: '1200px',
       disableClose: true
     });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.fetchBooks();
+    });
   }
 
+  toggleExpandRow(book: Book): void {
+    this.expandedElement = this.expandedElement === book ? null : book;
+  }
 }
